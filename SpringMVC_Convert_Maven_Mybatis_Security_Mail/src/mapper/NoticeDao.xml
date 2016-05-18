@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace="dao.NoticeDao 인터페이스 동일 경로 
+     구현된되는 ID 값들을 인터페이스 함수명과 동일
+ -->
+<mapper namespace="dao.NoticeDao">
+ <select id="getCount" resultType="Integer">
+  <!-- String field => param1, String query=>param2 -->
+  SELECT COUNT(*) CNT 
+  FROM NOTICES 
+  WHERE ${param1} LIKE '%${param2}%'
+  <!-- 
+   ${있는 그대로} , #{형변환} 차이점
+   param1 => AA 
+   ${param1} => AA   (column 명 , Table 명 )
+   #{param1} => 'AA' 
+   
+   param2 = > 88
+   ${param2} => 88
+   #{param2} => 88
+   
+   oracle : where ename like '%kim%'
+   # => LIKE '%'kim'%'
+   $ => LIKR '%kim%' 
+   -->
+ </select> 
+ <select id="getNotices" resultType="vo.Notice">
+     <!-- List<Notice> getNotices(int page, String field, String query) 
+      int srow = 1 + (page-1)*5; 
+      int erow = 5 + (page-1)*5;
+     
+     -->
+     SELECT * FROM
+               ( SELECT ROWNUM NUM, N.* 
+                 FROM 
+                     ( SELECT * 
+                       FROM NOTICES 
+                       WHERE ${param2} LIKE '%${param3}%' ORDER BY REGDATE DESC) N
+                ) WHERE NUM BETWEEN 1 + (${param1}-1)*5 AND 5 + (${param1}-1)*5
+    </select>
+ <select id="getNotice" resultType="vo.Notice">
+     <!--   Notice getNotice(String seq) 
+            parameter 하나짜리는[ 변수이름 ] (param1 은 안되요)
+     -->
+     SELECT * FROM NOTICES WHERE SEQ=#{seq}
+</select>
+ <delete id="delete" >
+     <!-- int delete(String seq)  
+       parameterType="Interger" 을 생략해 볼게요
+     -->
+     DELETE NOTICES WHERE SEQ=#{seq}
+ </delete>
+ <update id="update" >
+     <!-- int update(Notice notice)   
+       parameter  객체로 ..... Notice 객체 (만약에 setter , getter 가 구현되어 있다면)
+       jdbcType=VARCHAR => null 처리 가능하다
+     -->
+     UPDATE NOTICES 
+     SET TITLE=#{title}, CONTENT=#{content}, 
+     	 FILESRC=#{fileSrc ,jdbcType=VARCHAR}, 
+     	 FILESRC2=#{fileSrc2 ,jdbcType=VARCHAR}
+     WHERE SEQ=#{seq}
+ </update>
+ <insert id="insert">
+     <!-- int insert( Notice n ) 
+        INSERT INTO TNOTICES(SEQ, TITLE, CONTENT, WRITER, REGDATE, HIT, FILESRC , FILESRC2)
+        VALUES( (SELECT MAX(TO_NUMBER(SEQ))+1 FROM TNOTICES), :title, :content, :writer, SYSDATE, 0, :fileSrc , :fileSrc2)
+     -->
+      <selectKey order="BEFORE" keyProperty="seq" resultType="String">
+       SELECT NVL(MAX(TO_NUMBER(SEQ)),0)+1 FROM NOTICES
+      </selectKey>
+      INSERT INTO NOTICES(SEQ, TITLE, CONTENT, WRITER, REGDATE, HIT, FILESRC , FILESRC2)
+      VALUES( #{seq}, #{title}, #{content}, 'kglim', SYSDATE, 0, #{fileSrc ,jdbcType=VARCHAR} , #{fileSrc2 ,jdbcType=VARCHAR})
+</insert>
+   
+    <!-- 동적쿼리 .... 조별로 테스트 
+    	<select id="totalSearch" resultType="kr.co.MiOhRecipe.dto.RecipeDto">
+  			SELECT RECIPENO, CATEGORYNO, FOODNO, TITLE, USERID, CONTENT, REGDATE, RECIPEIMAGE, HIT, GOOD, PRODUCTNO, VIDEONAME, RESTAURANTADDR
+  			FROM RECIPEBOARD
+  			<where>
+   				<if test="param2 == 2">
+    				categoryNo IN(2,3,4)
+   				</if>
+        		<if test="param2 == 3">
+    				categoryNo IN(5,6)
+   				</if>
+        		<if test="param2 == 4">
+    				categoryNo IN(7,8)
+   				</if>
+   				<if test="param1 != null">
+    				and (title LIKE '%${param1}%' OR content LIKE '%${param1}%')
+  			    </if>
+  			</where>   
+  			ORDER BY RECIPENO desc
+ 		</select>
+     -->
+</mapper>
+ 
+<!-- 
+ 추후 참고 자료
+ 
+<resultMap type="org.apache.ibatis.submitted.rounding.User" id="usermap">
+  <id column="id" property="id"/>
+  <result column="name" property="name"/>
+  <result column="funkyNumber" property="funkyNumber"/>
+  <result column="roundingMode" property="roundingMode"/>
+ </resultMap>
+ 
+ <select id="getUser" resultMap="usermap">
+  select * from users
+ </select>
+ <insert id="insert">
+     insert into users (id, name, funkyNumber, roundingMode) values (
+      #{id}, #{name}, #{funkyNumber}, #{roundingMode}
+     )
+ </insert>
+ 
+ <resultMap type="org.apache.ibatis.submitted.rounding.User" id="usermap2">
+  <id column="id" property="id"/>
+  <result column="name" property="name"/>
+  <result column="funkyNumber" property="funkyNumber"/>
+  <result column="roundingMode" property="roundingMode" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+ </resultMap>
+ <select id="getUser2" resultMap="usermap2">
+  select * from users2
+ </select>
+ <insert id="insert2">
+     insert into users2 (id, name, funkyNumber, roundingMode) values (
+      #{id}, #{name}, #{funkyNumber}, #{roundingMode, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+     )
+ </insert> -->

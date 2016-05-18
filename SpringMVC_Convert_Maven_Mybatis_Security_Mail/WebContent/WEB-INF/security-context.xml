@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:security="http://www.springframework.org/schema/security"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans 
+ 					 http://www.springframework.org/schema/beans/spring-beans.xsd
+  					 http://www.springframework.org/schema/security 
+  					 http://www.springframework.org/schema/security/spring-security.xsd">
+  					 
+  					 
+    <!-- 1단계 권한 테스트_ in memory 방식의 권한 처리 및 스프링에서 제공하는 자동화된 로그인 폼 사용 -->
+	<!-- 요청에 대한 setting -->
+	<!-- <security:http auto-config="true">
+	    auto-config="true" 를 사용하면, 밑에 두 권한을 가진 사용자가 아니라면 
+			 스프링이 제공하는 로그인 페이지로 이동함
+			 단, 내가 설정한 로그인 페이지로 이동하게 하려면 태그의 name 설정에 주의해야 한다???
+          
+	    
+		요청이 들어오면 중간에 가로 채서 ROLE_USER라는 권한을 가진 사용자만 
+		      게시판 상세보기 페이지의 access(접근) 허용
+		<security:intercept-url pattern="/customer/noticeDetail.htm"
+			access="hasRole('ROLE_USER')" />
+		요청이 들어오면 중간에 가로 채서 ROLE_ADMIN라는 권한을 가진 사용자만 
+		       게시판 글쓰기 페이지의 access(접근) 허용
+		<security:intercept-url pattern="/customer/noticeReg.htm"
+			access="hasRole('ROLE_ADMIN')" />
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+			  in-memory 방식 사용
+				<security:user name="kkk" password="1004" authorities="ROLE_USER"/>
+				DB연동 없이 xml에 기술해서 사용가능
+					kkk라는 사용자가 접속하면 ROLE_USER 라는 권한을 주겠다는 것
+							
+				<security:user name="test" password="1004" authorities="ROLE_USER,ROLE_ADMIN"/>
+				DB연동 없이 xml에 기술해서 사용가능
+					test라는 사용자가 접속하면 ROLE_ADMIN 라는 권한을 주겠다는 것
+					
+			</security:user-service>		
+		</security:authentication-provider>
+	</security:authentication-manager> 	 -->
+	
+	<!-- 2단계 권한 테스트_ 사용자가 만든 로그인 폼 사용 및 login.jsp페이지에서 태그의 name, action 값에 대한 설정 테스트-->	
+	<!-- <security:http>
+		<security:csrf disabled="true"/>
+		<security:form-login authentication-failure-url="/joinus/login.htm?error" login-page="/joinus/login.htm"/>
+	    authentication-failure-url="/joinus/login.htm?error" : 로그인 시 에러에 대한 처리 
+	    
+	    로그아웃처리 
+	    <security:logout logout-success-url="/index.htm"/>
+	    
+		요청이 들어오면 중간에 가로 채서 ROLE_USER라는 권한을 가진 사용자만 
+		      게시판 상세보기 페이지의 access(접근) 허용
+		<security:intercept-url pattern="/customer/noticeDetail.htm"
+			access="hasRole('ROLE_USER')" />
+		요청이 들어오면 중간에 가로 채서 ROLE_ADMIN라는 권한을 가진 사용자만 
+		       게시판 글쓰기 페이지의 access(접근) 허용
+		<security:intercept-url pattern="/customer/noticeReg.htm"
+			access="hasRole('ROLE_ADMIN')" />
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+			  in-memory 방식 사용
+				<security:user name="kkk" password="1004" authorities="ROLE_USER"/>
+				DB연동 없이 xml에 기술해서 사용가능
+					kkk라는 사용자가 접속하면 ROLE_USER 라는 권한을 주겠다는 것
+							
+				<security:user name="test" password="1004" authorities="ROLE_USER,ROLE_ADMIN"/>
+				DB연동 없이 xml에 기술해서 사용가능
+					test라는 사용자가 접속하면 ROLE_ADMIN 라는 권한을 주겠다는 것
+					
+			</security:user-service>		
+		</security:authentication-provider>
+	</security:authentication-manager> 		 -->	
+	
+	<!-- 3단계 권한 테스트_ JDBC 연동, Security가 강제하는 테이블 구성(role 테이블)-->	
+	<!-- <security:http>
+		<security:csrf disabled="true"/>
+		<security:form-login authentication-failure-url="/joinus/login.htm?error" login-page="/joinus/login.htm"/>
+	    authentication-failure-url="/joinus/login.htm?error" : 로그인 시 에러에 대한 처리 
+	    
+	    로그아웃처리 
+	    <security:logout logout-success-url="/index.htm"/>  
+	    
+	    security를 적용할 부분 	
+		<security:intercept-url pattern="/customer/noticeDetail.htm"
+			access="hasRole('ROLE_USER')" />		
+		<security:intercept-url pattern="/customer/noticeReg.htm"
+			access="hasRole('ROLE_ADMIN')" />
+	</security:http>
+	
+	<security:authentication-manager>
+	  <security:authentication-provider>
+		<security:jdbc-user-service
+			data-source-ref="driverManagerDataSource"
+			users-by-username-query="SELECT USERID, pwd AS PASSWORD, 1 enabled FROM member where userid=?"
+			authorities-by-username-query="select m.USERID , r.ROLE_NAME  
+           from member m join roll r 
+           on m.userid = r.userid 
+           where m.userid=?" />
+	  </security:authentication-provider>
+	</security:authentication-manager>	 -->
+	
+	<!-- 4단계 권한 테스트_JDBC 연동, Security가 강제하는 테이블 구성(role 테이블), intercept-url의 pattern 사용 -->			 
+  	<!-- 4단계 테스트를 위해서, notice.jsp페이지에 설정해둔 기존1을 사용해서 테스트 또는 
+  	     role를 하나만 걸어서 테스트? 3번으로 테스트
+  	 -->
+  	<security:http>
+		<security:csrf disabled="true"/>
+		<security:form-login authentication-failure-url="/joinus/login.htm?error" login-page="/joinus/login.htm"/>
+	    <!-- authentication-failure-url="/joinus/login.htm?error" : 로그인 시 에러에 대한 처리 --> 
+	    
+	   <!--  로그아웃처리 --> 
+	    <security:logout logout-success-url="/index.htm"/>  
+	    
+	    <!-- security를 적용할 부분  -->	    
+		<security:intercept-url pattern="/customer/*Reg.htm" access="hasRole('ROLE_USER')" />
+		<!-- aaaReg.htm , bbbb_Reg.htm 적용 -->		
+  		<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" /> <!-- admin 폴더 안의 하위 폴더까지 포함 -->
+	</security:http>
+	
+	<security:authentication-manager>
+	  <security:authentication-provider>
+		<security:jdbc-user-service
+			data-source-ref="driverManagerDataSource"
+			users-by-username-query="SELECT USERID, pwd AS PASSWORD, 1 enabled FROM member where userid=?"
+			authorities-by-username-query="select m.USERID , r.ROLE_NAME  
+           from member m join roll r 
+           on m.userid = r.userid 
+           where m.userid=?" />
+	  </security:authentication-provider>
+	</security:authentication-manager>					 
+  					 
+  					 
+  					 
+  					 
+  					 
+</beans>
