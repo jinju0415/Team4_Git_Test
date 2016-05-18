@@ -19,7 +19,7 @@
 		<!-- 일반적인 form태그 action를 통해 로그인  -->
 		<%-- <form action="${pageContext.request.contextPath}/login" method="post"> --%>
 			<fieldset>
-				<legend class="hidden">비밀번호변경</legend>
+				<legend class="hidden">비밀번호변경2</legend>
 				<h3>
 					<img src="images/txtTitle.png" />
 				</h3>
