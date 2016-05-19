@@ -14,7 +14,8 @@ public interface MemberDao {
 	//비밀번호 변경
 	public int update(Member member) throws ClassNotFoundException, SQLException;
 	
+	
 	//이메일여부 확인
-	boolean memberEmail(String userid, String email) throws ClassNotFoundException, SQLException;
+	public Member memberEmail(String userid, String email) throws ClassNotFoundException, SQLException;
 	
 }

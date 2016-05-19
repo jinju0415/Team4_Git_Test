@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <!-- 
+	    //회원정보 얻기
+		public Member getMember(String userid) throws ClassNotFoundException, SQLException;
+			
+		//회원가입
+		public int insert(Member member) throws ClassNotFoundException, SQLException;
+		
+		//비밀번호 변경
+		public int update(Member member) throws ClassNotFoundException, SQLException;
+		
+		//이메일여부 확인
+		boolean memberEmail(String userid, String email) throws ClassNotFoundException, SQLException; 
+	-->  
+ 
+<mapper namespace="dao.MemberDao">
+
+	<!-- 1. 회원정보 얻기  : getMembmer(String userid)  -->
+	<select id="getMember" resultType="vo.Member" >
+		SELECT * FROM MEMBER WHERE USERID=#{userid}	
+	</select>
+	
+	<!-- 2. 회원가입 : insert(Member member) -->
+	<insert id="insert" parameterType="vo.Member">
+		INSERT INTO MEMBER(USERID, PWD, NAME, GENDER, BIRTH, IS_LUNAR, CPHONE, EMAIL, HABIT, REGDATE) 
+		VALUES( #{userid}, #{pwd}, #{name}, #{gender}, #{birth}, 
+				#{is_lunar}, #{cphone}, #{email}, #{habit}, SYSDATE )	
+	</insert>
+	
+	<!-- 3. 비밀번호 변경 : update(Member member)  -->
+	<update id="update" parameterType="vo.Member">
+		update member set pwd=#{pwd} where userid=#{userid}
+	</update>
+	
+	<!-- 4. 회원 이메일 여부 확인 : memberEmail(String userid, String email)  -->
+	<select id="memberEmail" resultType="vo.Member">
+		select * from member where userid=#{param1} and email=#{param2}
+	</select>
+	
+</mapper>
+
+
+ 

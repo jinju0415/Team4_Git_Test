@@ -49,16 +49,16 @@
 					<span> <input type="text" id="year" />년 <input type="text"
 						id="month" />월 <input type="text" id="day" />일 <input
 						type="hidden" name="Birth" id="Birth" />
-					</span> <span class="moon"> <input type="radio" name="IsLunar"
+					</span> <span class="moon"> <input type="radio" name="is_lunar"
 						value="Solar" id="IsSolar" checked />양력 <input type="radio"
-						name="IsLunar" value="Lunar" id="IsLunar" />음력
+						name="is_lunar" value="Lunar" id="IsLunar" />음력
 					</span>
 				</dd>
 			</dl>
 			<dl class="join-form-row">
 				<dt class="join-form-title">핸드폰 번호</dt>
 				<dd class="join-form-data">
-					<input type="text" name="cPhone" /><span>[대시(-)를 포함할 것: 예)
+					<input type="text" name="cphone" /><span>[대시(-)를 포함할 것: 예)
 						010-3456-2934]</span>
 				</dd>
 			</dl>

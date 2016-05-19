@@ -14,10 +14,10 @@ http://www.springframework.org/schema/context/spring-context.xsd
   		<property name="username" value="springuser"></property>
   		<property name="password" value="1004"></property>
   </bean>
-  
+<!--   
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
   		<property name="dataSource" ref="driverManagerDataSource" />
-  </bean>
+  </bean> -->
     
   <!-- 공통빈 --> 
   <bean id="multipartResolver" 

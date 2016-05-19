@@ -16,13 +16,14 @@ component-scan
 @Autowired 어노테이션 적용을 위한 빈을 자동 등록
 -->
 <context:component-scan base-package="ncontrollers" />
+<context:component-scan base-package="service" />
 
 	<!-- 게시판 관련 : DAO , controller -->
 	<!-- Mybatis 설정으로 필요 없어요 -->
 	<!-- <bean id="noticedao" class="dao.NewNoticeDao"></bean> -->
    
     <!-- 회원관련 : DAO , Controller -->
-	<bean id="newMemberDao" class="dao.NewMemberDao"></bean>
+	<!-- <bean id="newMemberDao" class="sdao.NewMemberDao"></bean> -->
 
 	<!-- 대문 페이지 관련  -->
 	
